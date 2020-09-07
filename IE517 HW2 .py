@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[164]:
+# In[203]:
 
 
 import numpy as np
@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn import datasets
 from sklearn import preprocessing
+from sklearn.metrics import accuracy_score
 from matplotlib.colors import ListedColormap
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import DecisionTreeClassifier
@@ -19,7 +20,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error as MSE
 
 
-# In[165]:
+# In[204]:
 
 
 #Import dataset
@@ -37,7 +38,7 @@ X_train= scaler.transform(X_train)
 X_test= scaler.transform(X_test)
 
 
-# In[166]:
+# In[205]:
 
 
 #KNN
@@ -57,11 +58,18 @@ for k in k_range:
 
 print(scores)
 plt.plot(scores)
+plt.xlabel('Number of Neighbors')
+plt.ylabel('Accuracy')
+
+
+# In[206]:
+
+
 
 print('From the graph, we can find that the best k=12.')
 
 
-# In[167]:
+# In[207]:
 
 
 #Decision Tree
@@ -100,7 +108,7 @@ def plot_decision_regions(X, y, classifier, test_idx=None,
                     s=100, label='test set')
 
 
-# In[168]:
+# In[208]:
 
 
 
@@ -133,7 +141,7 @@ plt.ylabel('Impurity Index')
 plt.show()
 
 
-# In[169]:
+# In[209]:
 
 
 #Import dataset
@@ -162,7 +170,54 @@ plt.legend(loc='upper left')
 plt.show()
 
 
-# In[170]:
+# In[210]:
+
+
+#Import dataset
+df = pd.read_csv('/Users/zilingzheng/Desktop/IE517/hw2/Treasury Squeeze test - DS1.csv')
+#Pick feature and label
+X,y=df.iloc[:,2:11],df.iloc[:,11]
+y=y.map({True:1,False:0})
+#Split train and test sets 
+X_train, X_test, y_train, y_test= train_test_split(X, y, test_size=0.3, random_state=33)
+#print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+#Standardize the features
+scaler= preprocessing.StandardScaler().fit(X_train)
+X_train= scaler.transform(X_train)
+X_test= scaler.transform(X_test)
+
+
+# In[211]:
+
+
+dt_gini=DecisionTreeClassifier(criterion='gini', random_state=33)
+dt_gini.fit(X_train, y_train)
+y_pred_gini = dt_gini.predict(X_test)
+print(accuracy_score(y_test, y_pred_gini))
+
+dt_entropy=DecisionTreeClassifier(criterion='entropy', random_state=33)
+dt_entropy.fit(X_train, y_train)
+y_pred_entropy = dt_entropy.predict(X_test)
+print(accuracy_score(y_test, y_pred_entropy))
+
+
+# In[212]:
+
+
+score=[]
+for i in range(1,26):
+    dt_gini=DecisionTreeClassifier(max_depth=i, criterion='gini', random_state=33)
+    dt_gini.fit(X_train, y_train)
+    y_pred_gini = dt_gini.predict(X_test)
+    score.append(accuracy_score(y_test, y_pred_gini))
+
+#Plot the scores
+plt.plot(score,'o-')
+plt.xlabel('Max Depth')
+plt.ylabel('Accuracy')
+
+
+# In[213]:
 
 
 
