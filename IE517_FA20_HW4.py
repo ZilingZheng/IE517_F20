@@ -96,34 +96,6 @@ stats.probplot(housing['MEDV'],dist="norm",plot=pylab)
 plt.show()
 
 
-# In[28]:
-
-
-import ipywidgets as widgets
-from IPython.display import display, HTML
-javascript_functions = {False: "hide()", True: "show()"}
-button_descriptions  = {False: "Show code", True: "Hide code"}
-def toggle_code(state):
-    output_string = "<script>$(\"div.input\").{}</script>"
-    output_args   = (javascript_functions[state],)
-    output        = output_string.format(*output_args)
-    display(HTML(output))
-def button_action(value):
-    state = value.new
-    toggle_code(state)
-    value.owner.description = button_descriptions[state]
-state = False
-toggle_code(state)
-button = widgets.ToggleButton(state, description = button_descriptions[state])
-button.observe(button_action, "value")
-display(button)
-
-
-# In[ ]:
-
-
-
-
 
 # ## Part 2: Linear regression
 
@@ -422,7 +394,7 @@ print("MSE test for best alpha: {}".format(mse_test_lasso[index_lasso]))
 
 
 # ## Part 5: Appendix
-# 
+# https://github.com/ZilingZheng/IE517_F20/edit/master/IE517%20HW4.py
 
 # 
 
